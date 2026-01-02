@@ -1,10 +1,11 @@
-import './App.css'
 
-function App() {
+import './App.css'
+import Todo from './components/Todo'
+const App: React.FC = () => {
   return (
-    <>
-      <h1>React Todo App</h1>
-    </>
+    <div>
+      <Todo />
+    </div>
   )
 }
 
