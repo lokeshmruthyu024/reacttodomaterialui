@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
+import AddTodo from './Todo/AddTodo';
+import TodoList from './Todo/TodoList';
 type Todo = {
   id: number;
   title: string;
@@ -8,9 +10,6 @@ const Todo: React.FC = () => {
   const [task, setTask] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
-  const handleTask = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTask(event.target.value);
-  };
   const isInitialLoad = React.useRef(true)
   useEffect(() => {
     const storedItems = localStorage.getItem("todos");
@@ -63,63 +62,21 @@ const Todo: React.FC = () => {
         >
           Redux Todo App
         </Typography>
-        <Stack direction="row" spacing={1.5} justifyContent="center" sx={{ mb: 4 }}>
-          <TextField
-            placeholder='Add todo'
-            value={task}
-            onChange={handleTask}
-            onKeyDown={handleAddTodo}
-            fullWidth />
-          <Button variant='contained'
-            onClick={() => handleAddTodo()}
-            sx={{ whiteSpace: "nowrap" }}
-          >
-            {editId ? "Update Todo" : "Add Todo"}
-          </Button>
-        </Stack>
-        <Stack spacing={1.5}>
-          {todos.map((todo, index) => (
-            <Box
-              key={todo.id}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1.5,
-                px: 2,
-                py: 1,
-                borderRadius: 1,
-                boxShadow: 1
-              }}
-            >
-              <Typography sx={{ minWidth: 24 }}>
-                {index + 1}.
-              </Typography>
-              <Typography sx={{ flexGrow: 1 }}>
-                {todo.title}
-              </Typography>
-
-              {/* Actions */}
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={() => handleEditTodo(todo)}
-              >
-                Edit
-              </Button>
-
-              <Button
-                size="small"
-                variant="outlined"
-                color="error"
-                onClick={() => handleDeleteTask(todo.id)}
-              >
-                Delete
-              </Button>
-            </Box>
-          ))}
-        </Stack>
-      </Box >
-    </Container >
+        <AddTodo
+          task={task}
+          editId={editId}
+          onTaskChange={setTask}
+          onSubmit={handleAddTodo}
+        />
+        <Box mt={3}>
+          <TodoList
+            todos={todos}
+            onEdit={handleEditTodo}
+            onDelete={handleDeleteTask}
+          />
+        </Box>
+      </Box>
+    </Container>
   )
 }
 
